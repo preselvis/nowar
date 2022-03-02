@@ -1066,10 +1066,13 @@ OptionList=list(set(OptionList))
 
 
 def get_ip(host):
-    resolver = dns.resolver.Resolver()
-    ips = list(resolver.query(host, 'A'))
-    ip = random.choice(ips)
-    return ip.to_text()
+	try:
+		resolver = dns.resolver.Resolver()
+		ips = list(resolver.query(host, 'A'))
+		ip = random.choice(ips)
+	except:
+		ip = '255.255.255.255'
+	return ip.to_text()
 
 
 app = tk.Tk()
@@ -1098,6 +1101,8 @@ proc = None
 def start():
 	for hostText in OptionList:
 		ip = get_ip(hostText)
+		if ip == '255.255.255.255':
+			continue
 		message.set(f"Attacking {hostText} ({ip})")
 		current = pathlib.Path(__file__).parent.resolve()
 		os.chdir(current)
