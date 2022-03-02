@@ -1030,7 +1030,21 @@ d={
 	}
 }
 
+
+
 OptionList = [
+"tk-union.tv",
+"republic-tv.ru",
+"dnronline.su",
+"dnr-news.com",
+"gorod-donetsk.com",
+"vsednr.ru",
+"mininfodnr.ru",
+"tk-union.tv",
+"inosmi.ru",
+"www.the-american-interest.com",
+"miaistok.su",
+"lug-info.com",
 "www.rt.com",
 "sputniknews.com",
 "tass.ru",
@@ -1042,7 +1056,8 @@ OptionList = [
 "www.smotrim.ru",
 "www.vgtrk.ru",
 "www.politnavigator.net",
-"ukraina.ru"
+"ukraina.ru",
+
 ] 
 
 f = [i.replace('https://', '').replace('http://', '').replace('/', '') for i in list(d.keys())[:10]]
